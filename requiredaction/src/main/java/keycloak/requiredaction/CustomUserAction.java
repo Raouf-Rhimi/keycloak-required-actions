@@ -40,11 +40,17 @@ public class CustomUserAction implements RequiredActionProvider {
 		RealmModel realm = context.getRealm();
 
 		try{
-			realm.getRole("legitimated").toString(); // you should replace the role name you want to grant to the user.
+			/**
+			 *   you should replace the role name "legitimated" according to your requirements. This role will be used for verifying if the user is legitimized or not
+			 */
+			realm.getRole("legitimated").toString();
 		}catch (NullPointerException e){
 			realm.addRole("legitimated");
 		}
 
+		/**
+		 * We get the data entered by the user.
+		 */
 		MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
 		String firstIdentifier = formData.getFirst(SECOND_IDENTIFIER);
 		String secondIdentifier=formData.getFirst(FIRST_IDENTIFIER);
@@ -60,6 +66,9 @@ public class CustomUserAction implements RequiredActionProvider {
 			return;
 		}
 		UserModel user = context.getUser();
+		/**
+		 * we grant the user the role that we created previously.
+		 */
 		user.grantRole(realm.getRole("legitimated"));
 		context.success();
 	}
@@ -81,7 +90,9 @@ public class CustomUserAction implements RequiredActionProvider {
 	}
 
 	public Boolean validateInfo(String firstIdentifier,String secondIdentifier){
-		// in this method, we should implement our validation logic.that means the call of the API is going to be here
+		/**
+		 * in this method, call the external API that verifies the given information or make a call to a public LDAP or any other user federation.
+		 */
 		return firstIdentifier.equals("01/01/2000") && secondIdentifier.equals("CODE");
 	}
 
